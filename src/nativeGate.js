@@ -11,6 +11,7 @@ let os;
 let spawn;
 let spawnSync;
 
+let isIos = ("ios" in window);
 let isElectron = false;
 
 if ("require" in window) {
@@ -21,7 +22,7 @@ if ("require" in window) {
   isElectron = true;
 }
 
-export const platform = isElectron ? "electron" : "android";
+export const platform = isElectron ? "electron" : (isIos ? "ios" : "android");
 
 export var version = "";
 
@@ -418,11 +419,11 @@ async function startDaemonVpn(
       .concat(
         isUnix
           ? [
-              "--dns-listen",
-              "127.0.0.1:15353",
-              "--credential-cache",
-              "/tmp/geph4-ngcreds",
-            ]
+            "--dns-listen",
+            "127.0.0.1:15353",
+            "--credential-cache",
+            "/tmp/geph4-ngcreds",
+          ]
           : []
       ),
     { detached: false }
@@ -467,7 +468,7 @@ export async function stopDaemon() {
   }
   try {
     await axios.get("http://127.0.0.1:9809/kill");
-  } catch {}
+  } catch { }
   if (!isElectron) {
     return;
   }

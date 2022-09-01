@@ -202,7 +202,7 @@ const SettingsFrag: React.FC = (props) => {
               ""
             )}
           </>
-        ) : (
+        ) : getPlatform() === "electron" ? (
           <>
             <BooleanSetting
               propKey="vpn"
